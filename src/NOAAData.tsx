@@ -1,6 +1,24 @@
-import React, { useState, useCallback } from "react"
-
+import React, { useState, useCallback, Component } from "react"
+import type { Row } from './tablerow';
+import { DrawTable } from "./tablerow";
+import type { JSX } from "react/jsx-runtime";
 export function NOAAData() {
+    let data: Row[] = [{
+        CALL_SIGN: "",
+        CIG: "",
+        DATE: "",
+        DEW: "",
+        GE1: "",
+        GF1: "",
+        NAME: "",
+        QUALITY_CONTROL: "",
+        REPORT_TYPE: "",
+        SOURCE: "",
+        STATION: "",
+        TMP: "",
+        VIS: "",
+        WND: ""
+    }];
     // Читаем начальные параметры из URL (один раз при монтировании)
     const initialParams = new URLSearchParams(window.location.search)
 
@@ -12,7 +30,6 @@ export function NOAAData() {
     // Состояния запроса
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-
     // Валидация + запрос
     const fetchData = useCallback(async () => {
         // 1. Базовая валидация
@@ -51,8 +68,8 @@ export function NOAAData() {
                 throw new Error(`HTTP ${res.status}: ${res.statusText}`)
             }
 
-            const data = await res.json()
-            console.log(data)
+            data = await res.json()
+            //console.log(data)
             // Здесь можно сохранить данные в state, если нужно отобразить
 
         } catch (err) {
@@ -76,8 +93,9 @@ export function NOAAData() {
     const handleGo = () => {
         updateURL()   // синхронизируем с URL
         fetchData()   // делаем запрос
-    }
+        // DrawTable(data)
 
+    }
     return (
         <div className="noaadiv">
             <div className="noaadate">
@@ -116,8 +134,9 @@ export function NOAAData() {
 
             {/* Отображение ошибок */}
             {error && <p style={{ color: "red", marginTop: 8 }}>{error}</p>}
-
             {/* Здесь можно добавить отображение данных, если нужно */}
+
         </div>
+
     )
 }
