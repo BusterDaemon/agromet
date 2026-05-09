@@ -1,4 +1,6 @@
 import React, { useState, useCallback } from "react"
+import type { IAPIResp } from "./models/APIResp"
+import { NOAATable } from "./NOAATable"
 
 export function NOAAData() {
     // Читаем начальные параметры из URL (один раз при монтировании)
@@ -12,6 +14,8 @@ export function NOAAData() {
     // Состояния запроса
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+
+    const [data, setData] = useState<IAPIResp[]>([])
 
     // Валидация + запрос
     const fetchData = useCallback(async () => {
@@ -44,16 +48,16 @@ export function NOAAData() {
         setError(null)
 
         try {
-            const url = `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-hourly&dataTypes=WND,TMP,DEW,STATION,DATE,NAME,REPORT_TYPE,CIG,VIS,DEW,AA1,GE1,GF1,IA1,MW1&stations=${stationID}&startDate=${befDate}&endDate=${endDate}&includeAttributes=true&format=json&units=metric`
+            const url = `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-hourly&dataTypes=WND,TMP,DEW,STATION,DATE,NAME,CIG,VIS,DEW,AA1,GE1,GF1,IA1,MW1,GA1&stations=${stationID}&startDate=${befDate}&endDate=${endDate}&includeAttributes=true&format=json&units=metric`
 
             const res = await fetch(url)
             if (!res.ok) {
                 throw new Error(`HTTP ${res.status}: ${res.statusText}`)
             }
 
-            const data = await res.json()
-            console.log(data)
-            // Здесь можно сохранить данные в state, если нужно отобразить
+            const rdata = await res.json()
+            console.log(rdata)
+            setData(rdata)
 
         } catch (err) {
             setError(err instanceof Error ? err.message : "Что-то пошло не так")
@@ -117,7 +121,7 @@ export function NOAAData() {
             {/* Отображение ошибок */}
             {error && <p style={{ color: "red", marginTop: 8 }}>{error}</p>}
 
-            {/* Здесь можно добавить отображение данных, если нужно */}
+            <NOAATable data={data} />
         </div>
     )
 }

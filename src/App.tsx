@@ -1,4 +1,3 @@
-import { APITester } from "./APITester";
 import { NOAAData } from "./NOAAData";
 import "./index.css";
 
