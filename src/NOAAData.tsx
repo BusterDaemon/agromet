@@ -139,7 +139,7 @@ export function NOAAData() {
       {error && <p style={{ color: "red", marginTop: 8 }}>{error}</p>}
 
       <div className="monthly-stats-section">
-        <h2>Monthly Statistics</h2>
+        <h2>Статистика за месяц</h2>
         <MonthlyStatsTable data={monthlyStats} />
       </div>
     </div>

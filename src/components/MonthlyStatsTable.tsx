@@ -7,20 +7,20 @@ interface MonthlyStatsTableProps {
 
 export function MonthlyStatsTable({ data }: MonthlyStatsTableProps) {
   if (data.length === 0) {
-    return <div>No data to display</div>;
+    return <div>Нету данных для отображения</div>;
   }
 
   return (
     <table className="monthly-stats-table">
       <thead>
         <tr>
-          <th>Month</th>
-          <th>Avg Temp (°C)</th>
-          <th>Min Temp (°C)</th>
-          <th>Max Temp (°C)</th>
-          <th>Total Precip (mm)</th>
-          <th>Avg Humidity (%)</th>
-          <th>Sunny Days</th>
+          <th>Месяц</th>
+          <th>Средняя температура (°C)</th>
+          <th>Минимальная температура (°C)</th>
+          <th>Максимальная температура (°C)</th>
+          <th>Суммарное количество осадков (мм.)</th>
+          <th>Средняя влажность (%)</th>
+          <th>Количество солнечных дней</th>
         </tr>
       </thead>
       <tbody>
