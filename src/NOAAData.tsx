@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from "react";
 import type { IAPIResp } from "./models/APIResp";
 
-import { processNOAAData } from "./utils/processNOAA";
+import { processNOAAData, type MonthlyStats } from "./utils/processNOAA";
 import { MonthlyStatsTable } from "./components/MonthlyStatsTable";
+import { generateCsv, mkConfig } from "export-to-csv";
 
 export function NOAAData() {
   // Читаем начальные параметры из URL (один раз при монтировании)
@@ -35,6 +36,34 @@ export function NOAAData() {
       sunnyDays: number;
     }[]
   >([]);
+
+  const expCsvData = (data: MonthlyStats[]) => {
+    const csvConfig = mkConfig({ useKeysAsHeaders: true });
+    const csv = generateCsv(csvConfig)(data as any);
+
+    const blob = new Blob([csv.toString()], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "monthly_stats.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const expJsonData = (data: MonthlyStats[]) => {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "monthly_stats.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   // Валидация + запрос
   const fetchData = useCallback(async () => {
@@ -141,6 +170,16 @@ export function NOAAData() {
       <div className="monthly-stats-section">
         <h2>Статистика за месяц</h2>
         <MonthlyStatsTable data={monthlyStats} />
+        {monthlyStats.length > 0 && (
+          <button onClick={() => expCsvData(monthlyStats)}>
+            Сохранить в CSV
+          </button>
+        )}
+        {monthlyStats.length > 0 && (
+          <button onClick={() => expJsonData(monthlyStats)}>
+            Сохранить в JSON
+          </button>
+        )}
       </div>
     </div>
   );

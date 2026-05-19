@@ -246,5 +246,8 @@ export function processNOAAData(data: IAPIResp[]): MonthlyStats[] {
   // Sort by yearMonth ascending
   result.sort((a, b) => a.yearMonth.localeCompare(b.yearMonth));
 
+  // Removes the first element
+  result.shift();
+
   return result;
 }

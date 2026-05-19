@@ -9,6 +9,7 @@
     "start": "NODE_ENV=production bun src/index.ts"
   },
   "dependencies": {
+    "export-to-csv": "^1.4.0",
     "react": "^19",
     "react-dom": "^19",
     "recharts": "^3.8.1"
