@@ -14,6 +14,8 @@ function parseNumericValue(str: string | undefined): number {
   if (parts.length === 0) return NaN;
   const valueStr = parts[0].trim();
   if (!valueStr) return NaN;
+  if (parts[1] === "9") return NaN;
+
   // Check if it's all nines (with optional sign)
   const match = valueStr.match(/^[+-]?9+$/);
   if (match) return NaN;
